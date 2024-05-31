@@ -1,0 +1,11 @@
+git
+xclip
+htop
+zsh
+ripgrep
+wget
+curl
+fzf
+p7zip-full
+xz-utils
+dpkg
