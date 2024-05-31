@@ -1,0 +1,9 @@
+services: 
+  ubuntu:
+    image: envubuntu:latest
+    tty: true
+    stdin_open: true
+    container_name: EnvUbuntu
+    
+    volumes:
+    - /home/angel/Documents/Proyect:/root/Documents

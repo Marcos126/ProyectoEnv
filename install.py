@@ -47,7 +47,11 @@ def command_run(command):
 def check_package(package):
     result = subprocess.run(["dpkg","-s",package], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if result.returncode !=0:
-        command_run(["sudo","DEBIAN_FRONTEND=noninteractive","apt-get","install",package,"-y"])
+        dpkg_result = subprocess.run(["sudo","DEBIAN_FRONTEND=noninteractive","apt-get","install",package,"-y"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if dpkg_result.returncode != 0:
+            print(f"Error al instalar {package}")
+
+
 
 #------------------------------------------ASINCRONOS-----------------------------------------------
 

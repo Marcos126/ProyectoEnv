@@ -1,22 +1,19 @@
 import subprocess
-import sys
-import signal
+import re
+from tqdm import tqdm
 
-def def_handler(sig,frame):
-    print("\n\n [!] Saliendo ....")
+def install_packages(packages):
+    for package in packages:
+        with subprocess.Popen(['sudo', 'apt-get', 'install', '-y', package],
+                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                              text=True, bufsize=1) as proc, tqdm(desc=package) as bar:
+            for line in proc.stdout:
+                if "Desempaquetando" in line:
+                    bar.update(25)  # Ajustar según la estimación de progreso por salida
+                elif "Configurando" in line:
+                    bar.update(75)  # Ajustar según la estimación de progreso por salida
+                print(line, end='')
 
-    sys.exit(1)
-signal.signal(signal.SIGINT, def_handler)
-
-def responder():
-    response = subprocess.run(["ping","-w","1","0.0.0.1"],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    contador = 0
-    while response.returncode !=0:
-        response = subprocess.run(["ping","-w","1","0.0.0.1"],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        print(response.returncode , contador)
-        contador += 1
-    print(response.returncode)
-
-if __name__ == '__main__': 
-    responder()
+packages = ["curl", "vim"]
+install_packages(packages)
 
