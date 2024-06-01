@@ -60,7 +60,7 @@ def package_checker():
         else: 
             installed_packages.append(package)
 
-    p2 = log.progress(f"Numero de paquetes a instalar")
+    p2 = log.progress(f"{len(packages_to_install)} : Paquetes por instalar")
     counter = 0 
     install_errors = []
     for install in packages_to_install: 
@@ -261,8 +261,6 @@ def tryconfig():
     #Copiando Pictures del repo en el home del usuario
     p6.status("Copiando Pictures")
 
-    
-
     pic = Path(f"{home_path}/Pictures")
     if not pic.exists():
         pic.mkdir()
@@ -274,7 +272,11 @@ def tryconfig():
     #Copiando el .p10k del repo
     p6.status("Copiando .p10k")
     command_run(f"mv {destination_repo}/.p10k.zsh {home_path}/.p10k.zsh")
+    target = Path(f"{home_path}/.config/bin")
+    target.mkdir()
+    command_run(f"touch {target}/target")
     p6.success("Config de Github instalada correctamente")
+
 
 
 #Instlacion de lsd
