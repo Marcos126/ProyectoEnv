@@ -70,10 +70,10 @@ def package_checker():
         if installe_package.returncode !=0:
             install_errors.append(install)
         else:
-            print("-----------------------------")
+            print("---------------------------------------------")
             print(f"[+] {install} Instalado correctamente [+]")
-            print("-----------------------------")
         if counter == len(packages_to_install):
+            print("---------------------------------------------")
             p2.success("Paquetes instalados correctemnte")
 
     for error in install_errors:
@@ -87,7 +87,7 @@ def package_checker():
 
 def brave_check():
     p3 = log.progress("Brave Install")
-    time.sleep(2)
+    
 
     test = command_run("dpkg -s brave-browser")
     if test.returncode == 0:
@@ -149,7 +149,7 @@ def brave_install(p3):
 #En esta funcion se instala una nerd font que es la que yo utilizo.
 def nerd_fonts():
     p4 = log.progress("Nerd Fonts")
-    time.sleep(2)
+    
     #Url de la fuente
     p4.status("Seteando la variable de la fuente")
     font_url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip"
@@ -178,7 +178,7 @@ def nerd_fonts():
     
 def kitty_install():
     p5 = log.progress("Kitty Install")
-    time.sleep(2)
+    
     #URL del bundle
     p5.status("Seteando la variable de la descarga")
     kitty_url = "https://github.com/kovidgoyal/kitty/releases/download/v0.35.1/kitty-0.35.1-x86_64.txz"
@@ -216,7 +216,7 @@ def kitty_install():
 
 def tryconfig():
     p6 = log.progress("Config Repos")
-    time.sleep(2)
+    
     #Paquetes a instalar la configuracion
     repo_packages = ["nvim","kitty","picom","polybar" , "sxhkd", "bspwm"]
     #Seteando la url del repositorio
@@ -283,7 +283,7 @@ def tryconfig():
     
 def lsd_install():
     p7 = log.progress("LSD Install")
-    time.sleep(2)
+    
 
     # URL de la descarga
     p7.status("Seteando la url de lsd")
@@ -320,7 +320,7 @@ def lsd_install():
 
 def nvim_install():
     p8 = log.progress("Nvim Install")
-    time.sleep(2)
+    
     #URL del bundle
     p8.status("Seteando la URL")
     nvim_url = "https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz"
@@ -350,7 +350,7 @@ def nvim_install():
 
 def zsh_install():
     p9 = log.progress("ZSH Install")
-    time.sleep(2)
+    
     #URL de descarga
     p9.status("Seteando el url de ohmyzsh")
     oh_my_zsh = "curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
@@ -367,7 +367,7 @@ def zsh_install():
         command_run(f"rm -rf {install_path}")
 
     #Instalando oh my zsh
-    command_run(f"{oh_my_zsh} | bash ")
+    command_run(f"{oh_my_zsh} | bash --unattended")
     command_run(f"source {home_path}/.zshrc")
     command_run(f"git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git {home_path}/.oh-my-zsh/custom/themes/powerlevel10k")
     p9.success("Oh-My-ZSH Instalado correctamente")
@@ -377,7 +377,7 @@ def zsh_install():
 def change_shell():
 
     p10 = log.progress("Changing Shell")
-    time.sleep(2)
+    
     #Cambiando de shell
     result_userName=subprocess.run(["whoami"], capture_output=True, text=True)
     userName = result_userName.stdout.strip()
