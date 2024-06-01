@@ -1,11 +1,12 @@
 git
 xclip
-htop
-zsh
 ripgrep
-wget
+zsh
 curl
+wget
 fzf
 p7zip-full
 xz-utils
 dpkg
+feh
+htop
