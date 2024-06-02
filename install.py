@@ -1,9 +1,8 @@
 import threading
-import subprocess
-import os 
+import subprocess 
+import os
 import signal
 import sys
-import time
 from pathlib import Path
 from pwn import log
 

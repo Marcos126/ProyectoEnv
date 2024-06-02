@@ -1,4 +1,5 @@
 import subprocess
+from pathlib import Path
 import sys
 from pwn import log
 import signal
@@ -12,42 +13,23 @@ signal.signal(signal.SIGINT, def_handler)
 
 def command_run(cmd):
     proc = subprocess.run(cmd,shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if  proc.returncode == 0:
+        print(f"[+] {cmd} Ejecutado correctemente")
+    else: 
+        print(f"[!] Error ejecutando\n\n\n {cmd}\n\n\n")
+        print(proc.stdout)
+        print(proc.stderr)
+        sys.exit(1)
     return proc
 
-package_list = ["htop","xclip","apt-utils","feh","sqlmap","vim","nano"]
 
-def package_checker():
-    packages_to_install = []
-    installed_packages = []
-    counter = 0
-    for package in package_list:
-        check = subprocess.run(f"dpkg -s {package}",shell=True,text=True, stderr=subprocess.PIPE,stdout=subprocess.PIPE)
-        counter += 1
-        if check.returncode != 0:
-            packages_to_install.append(package)
-        else: 
-            installed_packages.append(package)
+def npm_install():
 
-    p2 = log.progress(f"{len(packages_to_install)} : Paquetes por instalar")
-    counter = 0 
-    install_errors = []
-    for install in packages_to_install: 
-        counter += 1
-        p2.status(f"{install}")
-        installe_package = command_run(f"sudo apt-get install -y {install}")
-        if installe_package.returncode !=0:
-            install_errors.append(install)
-        else:
-            print("-----------------------------")
-            print(f"[+] {install} Instalado correctamente [+]")
-            print("-----------------------------")
-        if counter == len(packages_to_install):
-            p2.success("Paquetes instalados correctemnte")
-
-    for error in install_errors:
-        log.info(f"[!] Error instalando{error}")
-
+    npm_path = Path("/opt/") / "node.tar.xz"
+    command_run(f"sudo wget -O {npm_path} https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-x64.tar.xz")
+    command_run(f"sudo tar -vxf {npm_path}")
+    command_run(f"sudo rm {npm_path}")
 
 
 if __name__ == "__main__":
-    package_checker()
+    npm_install()
