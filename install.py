@@ -271,9 +271,11 @@ def tryconfig():
     #Copiando el .p10k del repo
     p6.status("Copiando .p10k")
     command_run(f"mv {destination_repo}/.p10k.zsh {home_path}/.p10k.zsh")
+
     target = Path(f"{home_path}/.config/bin")
-    target.mkdir()
-    command_run(f"touch {target}/target")
+    if not target.exist:
+        target.mkdir()
+        command_run(f"touch {target}/target")
     p6.success("Config de Github instalada correctamente")
 
 
@@ -366,7 +368,7 @@ def zsh_install():
         command_run(f"rm -rf {install_path}")
 
     #Instalando oh my zsh
-    command_run(f"{oh_my_zsh} | bash --unattended")
+    command_run(f"{oh_my_zsh} | bash")
     command_run(f"source {home_path}/.zshrc")
     command_run(f"git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git {home_path}/.oh-my-zsh/custom/themes/powerlevel10k")
     p9.success("Oh-My-ZSH Instalado correctamente")
@@ -398,8 +400,8 @@ if __name__ == '__main__':
         p1 = log.progress("Instalando dependencias")
 
         package_checker()
-
-        functions = [brave_check, nerd_fonts, kitty_install, lsd_install, nvim_install, zsh_install, change_shell]
+        brave_check()
+        functions = [ nerd_fonts, kitty_install, lsd_install, nvim_install, zsh_install, change_shell]
         threads = []
         
         for function in functions:
