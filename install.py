@@ -59,24 +59,30 @@ def package_checker():
         else: 
             installed_packages.append(package)
 
-    p2 = log.progress(f"{len(packages_to_install)} : Paquetes por instalar")
-    counter = 0 
-    install_errors = []
-    for install in packages_to_install: 
-        counter += 1
-        p2.status(f"{install}")
-        installe_package = command_run(f"sudo apt-get install -y {install}")
-        if installe_package.returncode !=0:
-            install_errors.append(install)
-        else:
-            print("---------------------------------------------")
-            print(f"[+] {install} Instalado correctamente [+]")
-        if counter == len(packages_to_install):
-            print("---------------------------------------------")
-            p2.success("Paquetes instalados correctemnte")
+    if len(packages_to_install) == 0:
+        p2 = log.progress("Paquetes")
+        p2.success("No hay paquetes por instalar")
+    else:
+        p2 = log.progress(f"{len(packages_to_install)} : Paquetes por instalar")
+        counter = 0 
+        install_errors = []
+        for install in packages_to_install: 
+            counter += 1
+            p2.status(f"{install}")
+            installe_package = command_run(f"sudo apt-get install -y {install}")
+            if installe_package.returncode !=0:
+                install_errors.append(install)
+            if len(install_errors) != 0:
+                print(f"Hubieron errores en la instalacion de {len(install_errors)} paquetes")
+            else:
+                print("---------------------------------------------")
+                print(f"[+] {install} Instalado correctamente [+]")
+            if counter == len(packages_to_install):
+                print("---------------------------------------------")
+                p2.success("Paquetes instalados correctemnte")
+        for error in install_errors:
+            log.info(f"[!] Error instalando{error}")
 
-    for error in install_errors:
-        log.info(f"[!] Error instalando{error}")
 
 
 
@@ -273,7 +279,7 @@ def tryconfig():
     command_run(f"mv {destination_repo}/.p10k.zsh {home_path}/.p10k.zsh")
 
     target = Path(f"{home_path}/.config/bin")
-    if not target.exist:
+    if not target.exists:
         target.mkdir()
         command_run(f"touch {target}/target")
     p6.success("Config de Github instalada correctamente")
@@ -346,6 +352,15 @@ def nvim_install():
     command_run(f"sudo rm {tar_file}")
     p8.success("Nvim Instalado correctamente")
 
+#Instalacion de NodeJS 
+
+def npm_install():
+    npm_destination = Path("/opt/")
+    npm_path = Path("/opt/") / "node.tar.xz"
+    command_run(f"sudo wget -O {npm_path} https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-x64.tar.xz")
+    command_run(f"sudo tar -vxf {npm_path} -C {npm_destination}")
+    command_run(f"sudo rm {npm_path}")
+
 
 #Instalacion de oh my zsh
 
@@ -401,7 +416,7 @@ if __name__ == '__main__':
 
         package_checker()
         brave_check()
-        functions = [ nerd_fonts, kitty_install, lsd_install, nvim_install, zsh_install, change_shell]
+        functions = [npm_install, nerd_fonts, kitty_install, lsd_install, nvim_install, zsh_install, change_shell]
         threads = []
         
         for function in functions:

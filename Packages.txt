@@ -28,11 +28,11 @@ feh
 htop
 nmap
 hydra
-burpsuite
 sqlmap
 ruby-full
 tree
 masscan
 lxpolkit
-easyeffects
-spotify
+composer
+zsh-autosuggestions
+zsh-syntax-highlighting
