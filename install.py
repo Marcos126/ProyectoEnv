@@ -361,6 +361,14 @@ def npm_install():
     command_run(f"sudo tar -vxf {npm_path} -C {npm_destination}")
     command_run(f"sudo rm {npm_path}")
 
+#Instalacion de golang
+def go_install():  
+
+    go_destination = Path("/opt/")
+    go_path = Path("/opt/") / "go.tar.gz"
+    command_run(f"sudo wget -O {go_path} https://dl.google.com/go/go1.22.4.linux-amd64.tar.gz")
+    command_run(f"sudo tar -vxf {go_path} -C {go_destination}")
+    command_run(f"sudo rm {go_path}")
 
 #Instalacion de oh my zsh
 
@@ -416,7 +424,7 @@ if __name__ == '__main__':
 
         package_checker()
         brave_check()
-        functions = [npm_install, nerd_fonts, kitty_install, lsd_install, nvim_install, zsh_install, change_shell]
+        functions = [go_install, npm_install, nerd_fonts, kitty_install, lsd_install, nvim_install, zsh_install, change_shell]
         threads = []
         
         for function in functions:

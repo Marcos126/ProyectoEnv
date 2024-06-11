@@ -23,13 +23,13 @@ def command_run(cmd):
     return proc
 
 
-def npm_install():
+def go_install():  
 
-    npm_path = Path("/opt/") / "node.tar.xz"
-    command_run(f"sudo wget -O {npm_path} https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-x64.tar.xz")
-    command_run(f"sudo tar -vxf {npm_path}")
-    command_run(f"sudo rm {npm_path}")
-
+    go_destination = Path("/opt/")
+    go_path = Path("/opt/") / "go.tar.gz"
+    command_run(f"sudo wget -O {go_path} https://dl.google.com/go/go1.22.4.linux-amd64.tar.gz")
+    command_run(f"sudo tar -vxf {go_path} -C {go_destination}")
+    command_run(f"sudo rm {go_path}")
 
 if __name__ == "__main__":
-    npm_install()
+    go_install()

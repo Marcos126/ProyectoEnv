@@ -36,3 +36,4 @@ lxpolkit
 composer
 zsh-autosuggestions
 zsh-syntax-highlighting
+flameshot
