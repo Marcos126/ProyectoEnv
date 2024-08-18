@@ -21,10 +21,5 @@ RUN pip install pwntools --break-system-packages
 
 WORKDIR /home/developer/Documents
 
-VOLUME /home/angel/Documents/Proyect:/home/developer/Documents
-
-
 ENV DISPLAY=$DISPLAY
 VOLUME /tmp/.X11-unix/:/tmp.X11-unix
-
-

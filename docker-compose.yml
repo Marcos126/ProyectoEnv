@@ -7,4 +7,4 @@ services:
     container_name: EnvUbuntu
     
     volumes:
-    - /home/angel/Documents/Proyect:/home/developer/Documents
+    - /home/angel/Documents/proyectoenv/:/home/developer/Documents

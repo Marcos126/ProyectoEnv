@@ -11,8 +11,14 @@ def def_handler(sig,frame):
     sys.exit(1)
 signal.signal(signal.SIGINT, def_handler)
 
+
 def command_run(cmd):
-    proc = subprocess.run(cmd,shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proc = subprocess.run(cmd
+                          ,shell=True
+                          ,stdin=subprocess.PIPE
+                          ,stdout=subprocess.PIPE
+                          ,stderr=subprocess.PIPE
+                          ,text=True)
     if  proc.returncode == 0:
         print(f"[+] {cmd} Ejecutado correctemente")
     else: 
@@ -23,13 +29,24 @@ def command_run(cmd):
     return proc
 
 
-def go_install():  
 
-    go_destination = Path("/opt/")
-    go_path = Path("/opt/") / "go.tar.gz"
-    command_run(f"sudo wget -O {go_path} https://dl.google.com/go/go1.22.4.linux-amd64.tar.gz")
-    command_run(f"sudo tar -vxf {go_path} -C {go_destination}")
-    command_run(f"sudo rm {go_path}")
+def npmInstall():
+    installPath = Path("/opt/")
+    file = Path("/opt/") / "node.tar.xz"
+    url = "https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-x64.tar.xz"
+    wgetInstall(url,file,installPath)
+
+def goInstall():
+    installPath = Path("/opt/")
+    file = Path("/opt/") / "go.tar.gz"
+    url = "https://dl.google.com/go/go1.22.4.linux-amd64.tar.gz"
+    wgetInstall(url,file,installPath)
+
+def wgetInstall(url,file,installPath):
+    command_run(f"sudo wget -O {installPath} {url} ")
+    command_run(f"sudo tar -vxf {file} -C {installPath}")
+    command_run(f"sudo rm {file}")
 
 if __name__ == "__main__":
-    go_install()
+    goInstall()
+    npmInstall()

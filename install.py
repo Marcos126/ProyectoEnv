@@ -17,20 +17,15 @@ def def_handler(sig,frame):
     sys.exit(1)
 signal.signal(signal.SIGINT, def_handler)
 
-
-
-
 #------------------------------------------Globals-----------------------------------------------
 
 
 home_path = os.environ.get('HOME')
 
-
 def reading():
     with open("Packages.txt",'r') as file:
         packages = [line.strip() for line in file if line.strip()]
     return packages
-
 package_list = reading()
 
 
@@ -83,73 +78,7 @@ def package_checker():
         for error in install_errors:
             log.info(f"[!] Error instalando{error}")
 
-
-
-
 #------------------------------------------ASINCRONOS-----------------------------------------------
-
-#En esta funcion se va a instalar brave, el cual es mi navegador favorito.
-
-def brave_check():
-    p3 = log.progress("Brave Install")
-    
-
-    test = command_run("dpkg -s brave-browser")
-    if test.returncode == 0:
-        reinstall = input("[!] Brave ya esta instalado, deseas reinstalarlo? y/n:")
-        if reinstall == "y":
-            brave_install(p3)
-        elif reinstall == "n":
-            p3.failure("cancelado por el usuario")
-        else:
-            while reinstall != "y" or "n":
-                reinstall = input("[!] Brave ya esta instalado, deseas reinstalarlo? y/n:")
-                if reinstall == "y": 
-                    brave_install(p3)
-                elif reinstall == "n":
-                    p3.failure("Instalacion cancelada por el usuario")
-
-    else: brave_install(p3)
-    return p3
-
-def brave_install(p3):
-    #Descarga de la llave GPG.
-    p3.status("Descargando las GPG Keys")
-    command_run("sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg")
-    
-    #Concat de el repositorio de brave al source.list.
-    p3.status("Declarando los repositorios APT")
-    repo_entry = "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"
-    
-    p3.status("Agregando los respositorios APT")
-    path_entry = "/etc/apt/sources.list.d/brave-browser-release.list"
-    
-    writer_command = f"echo {repo_entry}| sudo -S tee {path_entry}"
-    command_run(writer_command)
-    
-    #Actualizar los repositorios de apt para ver el paquete de brave.
-    p3.status("Actualizando los repositorios APT")
-    apt_update = "sudo apt-get update"
-    command_run(apt_update)
-    
-    #Instalar brave.
-    test = command_run("dpkg -s brave-browser")
-    if test.returncode == 0:
-        p3.status("Reinstalando brave con APT")
-        command_run("sudo apt-get reinstall brave-browser -y")
-        p3.success("Brave Reinstalado correctamente")
-    else:
-        p3.status("Instalando Brave-browser con APT")
-        response = command_run("sudo apt-get install brave-browser -y")
-        counter = 1 
-        while response.returncode !=0: 
-            counter += 1
-            p3.status(f"Estan habiendo problemas para instalar brave.\nIntentos: {counter}]")
-            
-            response = command_run("sudo apt-get install brave-browser -y")
-            p3.success("Brave instalado correctamente")
-            break
-
 
 #En esta funcion se instala una nerd font que es la que yo utilizo.
 def nerd_fonts():
@@ -234,8 +163,6 @@ def tryconfig():
     #Seteando el destino de el git clone
     p6.status("Seteando el path de descarga")
     destination_repo = Path("/tmp/tryconfig")
-    
-    #Como esta funcion se va a repetir unas veces y no quiero nuevamente o tire error cuando lo haga, agrego un condicional para que solo haga git clone si la carpeat no existe
     p6.status("Descargando el repositorio")
     
     if destination_repo.exists():
@@ -262,7 +189,6 @@ def tryconfig():
         counter += 1
         if counter == len(repo_packages):
             p6.status("Archivos de configuracion instalados")
-
     #Copiando Pictures del repo en el home del usuario
     p6.status("Copiando Pictures")
 
@@ -354,21 +280,7 @@ def nvim_install():
 
 #Instalacion de NodeJS 
 
-def npm_install():
-    npm_destination = Path("/opt/")
-    npm_path = Path("/opt/") / "node.tar.xz"
-    command_run(f"sudo wget -O {npm_path} https://nodejs.org/dist/v20.14.0/node-v20.14.0-linux-x64.tar.xz")
-    command_run(f"sudo tar -vxf {npm_path} -C {npm_destination}")
-    command_run(f"sudo rm {npm_path}")
-
 #Instalacion de golang
-def go_install():  
-
-    go_destination = Path("/opt/")
-    go_path = Path("/opt/") / "go.tar.gz"
-    command_run(f"sudo wget -O {go_path} https://dl.google.com/go/go1.22.4.linux-amd64.tar.gz")
-    command_run(f"sudo tar -vxf {go_path} -C {go_destination}")
-    command_run(f"sudo rm {go_path}")
 
 #Instalacion de oh my zsh
 
@@ -423,8 +335,7 @@ if __name__ == '__main__':
         p1 = log.progress("Instalando dependencias")
 
         package_checker()
-        brave_check()
-        functions = [go_install, npm_install, nerd_fonts, kitty_install, lsd_install, nvim_install, zsh_install, change_shell]
+        functions = [nerd_fonts, kitty_install, lsd_install, nvim_install, zsh_install, change_shell]
         threads = []
         
         for function in functions:
